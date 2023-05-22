@@ -7,13 +7,15 @@ parses the csv into another format with these columns:
 suplier, party, total spend, expense category, expense sub category, example, notes
 
 '''
+import csv
+
 import pandas as pd
 import sys, numpy
 def convert(in_file, index_first_category_in_header,
             out_folder,
             col_supplier, col_party, col_total, col_more_than_1, col_notes,
             col_missing):
-    df = pd.read_csv(in_file, header=0, delimiter=',', quoting=0, encoding="utf-8")
+    df = pd.read_csv(in_file, header=0, delimiter=',', encoding="utf-8")
     #work out the taxonomy tree
     topcat, subcat, top_to_sub, sub_to_top=calculate_taxonomy(df, index_first_category_in_header)
     #print taxonomy
@@ -61,20 +63,23 @@ def convert(in_file, index_first_category_in_header,
         #flatten values
         subcat_str=""
         example_str=""
+        assigned_topcats=set()
         topcat_str=""
         for sc in assigned_subcat:
-            subcat_str+=sc+"|"
-            topcat_str+=sub_to_top[sc]+"|"
+            subcat_str+=sc.strip()+"|"
+            assigned_topcats.add(sub_to_top[sc])
+        for tc in assigned_topcats:
+            topcat_str+=tc.strip()+"|"
         for e in allocated_example:
-            example_str+=e+"|"
+            example_str+=e.strip()+"|"
 
         #create new row
         if subcat_str.endswith("|"):
-            subcat_str=subcat_str[0:len(subcat_str)-1]
+            subcat_str=subcat_str[0:len(subcat_str)-1].strip()
         if example_str.endswith("|"):
-            example_str=example_str[0:len(example_str)-1]
+            example_str=example_str[0:len(example_str)-1].strip()
         if topcat_str.endswith("|"):
-            topcat_str=topcat_str[0:len(topcat_str)-1]
+            topcat_str=topcat_str[0:len(topcat_str)-1].strip()
 
         if subcat_str=="" or topcat_str=="":
             print("empty cat, row={}, money={}".format(index+2, total))
@@ -91,7 +96,7 @@ def convert(in_file, index_first_category_in_header,
                                             'MultipleItems',
                                             'MissingInvoice',
                                             'Notes'])
-    new_df.to_csv(out_folder+"/converted_data.csv", sep=',', encoding='utf-8')
+    new_df.to_csv(out_folder+"/converted_data.csv", sep=',', encoding='utf-8', quoting=csv.QUOTE_ALL, quotechar='"')
 
 def calculate_taxonomy(dataframe, index_first_cateogry):
     top_column_headers= list(dataframe.head())

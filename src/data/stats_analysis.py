@@ -235,11 +235,11 @@ def calculate_dice(set1, set2):
 if __name__ == "__main__":
     in_file="/home/zz/Data/tas_etp/initial_coding_september-last-sheet-converted.csv"
     out_folder="/home/zz/Data/tas_etp"
-    #party_supplier_overlap(in_file, 'Party', 'Supplier',out_folder)
+    party_supplier_overlap(in_file, 'Party', 'Supplier',out_folder)
 
-    party_spend_category_percent(in_file, 'Party', 'TopCategory','Total',out_folder)
-    party_spend_category_percent(in_file, 'Party', 'SubCategory', 'Total', out_folder)
+    #party_spend_category_percent(in_file, 'Party', 'TopCategory','Total',out_folder)
+    #party_spend_category_percent(in_file, 'Party', 'SubCategory', 'Total', out_folder)
 
-    category_spend_party_percent(in_file, 'Party', 'TopCategory', 'Total', out_folder)
-    category_spend_party_percent(in_file, 'Party', 'SubCategory', 'Total', out_folder)
+    #category_spend_party_percent(in_file, 'Party', 'TopCategory', 'Total', out_folder)
+    #category_spend_party_percent(in_file, 'Party', 'SubCategory', 'Total', out_folder)
     #party_spending_per_supplier(in_file, 'Party', 'Supplier', 'Total', out_folder)
